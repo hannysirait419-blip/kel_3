@@ -3,7 +3,8 @@ package pbo.proyek.kel3.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import pbo.proyek.kel3.model.User;
 import pbo.proyek.kel3.repository.UserRepository;
 
@@ -16,29 +17,40 @@ public class AuthController {
     @Autowired
     private PasswordEncoder encoder;
 
+    // ROOT → langsung ke login (aman)
     @GetMapping("/")
-    public String home() {
+    public String root() {
         return "redirect:/login";
     }
 
-    // LOGIN
+    // LOGIN PAGE
     @GetMapping("/login")
     public String login() {
         return "login";
     }
 
-    // REGISTER
+    // REGISTER PAGE
     @GetMapping("/register")
     public String register() {
         return "register";
     }
 
+    // INDEX (halaman setelah login)
+    @GetMapping("/index")
+    public String index() {
+        return "index";
+    }
+
+    // PROCESS REGISTER
     @PostMapping("/register")
     public String processRegister(User user) {
 
+        // encode password
         user.setPassword(encoder.encode(user.getPassword()));
 
-        if(user.getUsername().toLowerCase().contains("admin")){
+        // set role
+        if (user.getUsername() != null &&
+            user.getUsername().toLowerCase().contains("admin")) {
             user.setRole("admin");
         } else {
             user.setRole("pelanggan");
