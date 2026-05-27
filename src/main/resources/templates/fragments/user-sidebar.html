@@ -1,0 +1,12 @@
+<div th:fragment="sidebar">
+    <div class="sidebar shadow">
+        <h3 class="text-center fw-bold mb-4">AGATHA CAFE</h3>
+        <a href="/">Beranda</a>
+        <a href="/menu">Menu Kami</a>
+        <a href="/galeri">Galeri</a>
+        <a href="/ulasan">Ulasan Pelanggan</a>
+        <form th:action="@{/logout}" method="post" class="mt-4 px-3">
+            <button class="btn btn-outline-light w-100">Logout</button>
+        </form>
+    </div>
+</div>

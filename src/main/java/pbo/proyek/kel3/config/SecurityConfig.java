@@ -26,7 +26,7 @@ public class SecurityConfig {
             // 2. Pengaturan izin akses halaman
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/register", "/login", "/css/**", "/js/**", "/assets/**").permitAll()
-                .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/admin/**").hasAuthority("admin")
                 .anyRequest().authenticated()
             )
 
@@ -36,15 +36,15 @@ public class SecurityConfig {
                 .loginProcessingUrl("/login") // Menjelaskan proses login lewat URL ini
                 .successHandler((request, response, authentication) -> {
                     
-                    // Cek apakah yang login punya otoritas ROLE_ADMIN
+                    // Cek apakah yang login punya otoritas admin
                     boolean isAdmin = authentication.getAuthorities()
                             .stream()
-                            .anyMatch(ga -> ga.getAuthority().equals("ROLE_ADMIN"));
+                            .anyMatch(ga -> ga.getAuthority().equals("admin"));
 
                     if(isAdmin){
                         response.sendRedirect("/admin/dashboard");
                     } else {
-                        response.sendRedirect("/");
+                        response.sendRedirect("/index.html");
                     }
                 })
                 .failureUrl("/login?error")
