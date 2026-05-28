@@ -1,11 +1,56 @@
-<div th:fragment="sidebar">
-    <div class="sidebar shadow">
-        <h3 class="text-center fw-bold mb-4">AGATHA CAFE</h3>
-        <a href="/menu">Menu Kami</a>
-        <a href="/galeri">Galeri</a>
-        <a href="/ulasan">Ulasan Pelanggan</a>
-        <form th:action="@{/logout}" method="post" class="mt-4 px-3">
-            <button class="btn btn-outline-light w-100">Logout</button>
-        </form>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+    <div th:fragment="sidebar">
+        <div class="sidebar shadow">
+            <h3 class="text-center fw-bold mb-4" style="color: #F2542D;">AGATHA CAFE</h3>
+            
+            <!-- Gunakan th:href agar link selalu benar -->
+            <a th:href="@{/}" class="nav-link-item">🍴 Menu Kami</a>
+            <a th:href="@{/galeri}" class="nav-link-item">📸 Galeri</a>
+            <a th:href="@{/ulasan}" class="nav-link-item">💬 Ulasan Pelanggan</a>
+            
+            <!-- Tombol Logout (Hanya tampil jika user sudah login) -->
+            <form th:action="@{/logout}" method="post" class="mt-5 px-3">
+                <button type="submit" class="btn btn-danger w-100 fw-bold shadow-sm">Logout</button>
+            </form>
+        </div>
+
+        <!-- Tambahkan style khusus di sini agar tidak perlu nulis di tiap halaman -->
+        <style>
+            .sidebar {
+                height: 100vh;
+                background-color: #1E4633; /* Hijau Khas Agatha Cafe */
+                color: white;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 250px;
+                padding-top: 30px;
+                z-index: 1000;
+            }
+            .sidebar h3 {
+                font-size: 1.5rem;
+                letter-spacing: 1px;
+            }
+            .nav-link-item {
+                color: rgba(255,255,255,0.8);
+                text-decoration: none;
+                display: block;
+                padding: 12px 25px;
+                font-weight: 500;
+                transition: all 0.3s;
+                border-left: 4px solid transparent;
+            }
+            .nav-link-item:hover {
+                background-color: rgba(255,255,255,0.1);
+                color: white;
+                border-left: 4px solid #F2542D; /* Aksen Orange saat hover */
+                padding-left: 35px;
+            }
+        </style>
     </div>
-</div>
+
+</body>
+</html>

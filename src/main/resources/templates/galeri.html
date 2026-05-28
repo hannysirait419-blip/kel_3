@@ -5,46 +5,38 @@
     <title>Galeri - Agatha Cafe</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background: #F9F6EE; }
-        .sidebar {
-            height: 100vh;
-            background-color: #1E4633;
-            color: white;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 250px;
-            padding-top: 20px;
-        }
-        .sidebar h3 { color: #F2542D; }
-        .sidebar a {
-            color: white; text-decoration: none; display: block; padding: 10px 20px; font-weight: 500;
-        }
-        .sidebar a:hover { background-color: #2d6a4f; }
+        body { background-color: #F9F6EE; }
         .content { margin-left: 250px; padding: 40px; }
-        .section-title { color: #1E4633; border-bottom: 3px solid #F2542D; display: inline-block; margin-bottom: 30px; padding-bottom: 5px; }
+        .section-title { color: #1E4633; border-bottom: 3px solid #F2542D; display: inline-block; margin-bottom: 30px; }
+        .galeri-card { transition: transform 0.2s; border: none; border-radius: 15px; overflow: hidden; }
+        .galeri-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
 
-<div th:replace="~{fragments/user-sidebar :: sidebar}"></div>
+    <!-- MEMANGGIL SIDEBAR YANG SAMA DENGAN INDEX -->
+    <div th:replace="~{fragments/user-sidebar :: sidebar}"></div>
 
-<div class="content">
-    <div class="mb-5 pb-5">
-        <h2 class="fw-bold section-title">Galeri</h2>
-        <div class="row">
+    <div class="content">
+        <div class="text-start">
+            <h2 class="fw-bold section-title">Galeri Foto Kami</h2>
+        </div>
+        
+        <div class="row mt-2">
             <div class="col-md-4 mb-4" th:each="galeri : ${daftarGaleri}">
-                <div class="card h-100 shadow-sm border-0">
-                    <img th:src="${galeri.gambarUrl}" style="height:220px; object-fit:cover;" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="fw-bold" th:text="${galeri.judul}"></h5>
-                        <p class="text-muted small" th:text="${galeri.deskripsi}"></p>
+                <div class="card galeri-card shadow-sm">
+                    <img th:src="${galeri.gambarUrl}" class="card-img-top" style="height: 250px; object-fit: cover;" alt="Foto Cafe">
+                    <div class="card-body bg-white text-center">
+                        <h5 class="fw-bold text-success" th:text="${galeri.judul}">Judul Foto</h5>
+                        <p class="text-muted small mb-0" th:text="${galeri.deskripsi}">Deskripsi singkat foto.</p>
                     </div>
                 </div>
             </div>
+            
+            <div th:if="${#lists.isEmpty(daftarGaleri)}" class="col-12 text-center py-5 text-muted">
+                <p>Belum ada foto di galeri.</p>
+            </div>
         </div>
     </div>
-</div>
-
 </body>
 </html>

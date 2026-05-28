@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Edit Menu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card { border-radius: 15px; border: none; }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-warning text-white fw-bold text-center py-3">
+                        <h4 class="mb-0">Edit Data Menu</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <form th:action="@{/admin/menu/update}" method="POST" enctype="multipart/form-data" th:object="${menu}">
+                            
+                            <!-- Hidden ID: Sangat Penting agar JPA melakukan UPDATE, bukan simpan baru -->
+                            <input type="hidden" th:field="*{id}">
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small">Nama Menu</label>
+                                <input type="text" th:field="*{nama}" class="form-control" placeholder="Nama menu" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small">Kategori</label>
+                                <select th:field="*{kategori}" class="form-select">
+                                    <option value="Makanan">Makanan</option>
+                                    <option value="Minuman">Minuman</option>
+                                    <option value="Snack">Snack / Cemilan</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small">Harga (Rp)</label>
+                                <input type="number" th:field="*{harga}" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small">Deskripsi</label>
+                                <textarea th:field="*{deskripsi}" class="form-control" rows="3"></textarea>
+                            </div>
+
+                            <div class="mb-4 text-center">
+                                <p class="small text-muted mb-2">Foto Saat Ini:</p>
+                                <img th:src="*{gambarUrl}" class="rounded shadow-sm mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                                
+                                <label class="d-block text-start fw-bold small">Ganti Foto (Kosongkan jika tidak diganti)</label>
+                                <input type="file" name="fileGambar" class="form-control" accept="image/*">
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <a th:href="@{/admin/menu}" class="btn btn-secondary w-50 fw-bold">Batal</a>
+                                <button type="submit" class="btn btn-warning text-white w-50 fw-bold">Update Menu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

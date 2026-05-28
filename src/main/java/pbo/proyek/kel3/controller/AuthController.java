@@ -17,47 +17,31 @@ public class AuthController {
     @Autowired
     private PasswordEncoder encoder;
 
-    // ROOT → langsung ke login (aman)
-    @GetMapping("/")
-    public String root() {
-        return "redirect:/login";
-    }
-
-    // LOGIN PAGE
+    // HALAMAN LOGIN
     @GetMapping("/login")
     public String login() {
         return "login";
     }
 
-    // REGISTER PAGE
+    // HALAMAN REGISTER
     @GetMapping("/register")
     public String register() {
         return "register";
     }
 
-    // INDEX (halaman setelah login)
-    @GetMapping("/index")
-    public String index() {
-        return "index";
-    }
-
-    // PROCESS REGISTER
+    // PROSES REGISTER
     @PostMapping("/register")
     public String processRegister(User user) {
-
-        // encode password
         user.setPassword(encoder.encode(user.getPassword()));
 
-        // set role
-        if (user.getUsername() != null &&
-            user.getUsername().toLowerCase().contains("admin")) {
+        // Logika Role: jika username ada kata 'admin', jadi admin.
+        if (user.getUsername() != null && user.getUsername().toLowerCase().contains("admin")) {
             user.setRole("admin");
         } else {
             user.setRole("pelanggan");
         }
 
         repo.save(user);
-
         return "redirect:/login?success";
     }
 }

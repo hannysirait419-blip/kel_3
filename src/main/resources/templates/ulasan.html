@@ -23,6 +23,7 @@
         .sidebar a:hover { background-color: #2d6a4f; }
         .content { margin-left: 250px; padding: 40px; }
         .section-title { color: #1E4633; border-bottom: 3px solid #F2542D; display: inline-block; margin-bottom: 30px; padding-bottom: 5px; }
+        .star-color { color: #ffc107; font-size: 1.2rem; }
     </style>
 </head>
 <body>
@@ -39,12 +40,23 @@
                 <div class="card shadow-sm border-0 bg-white">
                     <div class="card-body">
                         <h6 class="fw-bold text-primary" th:text="${ulasan.namaPelanggan}"></h6>
-                        <div class="mb-2 text-warning">
-                            <span th:text="'★'.repeat(ulasan.rating) + '☆'.repeat(5 - ulasan.rating)"></span>
+                        
+                        <!-- Bagian Bintang yang Diperbaiki -->
+                        <div class="mb-2 star-color">
+                            <span th:each="i : ${#numbers.sequence(1, 5)}" 
+                                  th:text="${i <= ulasan.rating ? '★' : '☆'}"></span>
                         </div>
-                        <p class="mb-0 text-muted" style="font-style: italic;">"<span th:text="${ulasan.komentar}"></span>"</p>
+
+                        <p class="mb-0 text-muted" style="font-style: italic;">
+                            "<span th:text="${ulasan.komentar}"></span>"
+                        </p>
                     </div>
                 </div>
+            </div>
+            
+            <!-- Pesan jika belum ada ulasan -->
+            <div class="col-12 text-muted" th:if="${#lists.isEmpty(daftarUlasan)}">
+                Belum ada ulasan. Jadilah yang pertama memberikan ulasan!
             </div>
         </div>
 
@@ -58,7 +70,7 @@
                     <label class="form-label">Rating (1-5)</label>
                     <input type="number" name="rating" class="form-control" min="1" max="5" value="5" required>
                 </div>
-                <button class="btn btn-success">Kirim Ulasan</button>
+                <button type="submit" class="btn btn-success">Kirim Ulasan</button>
             </form>
         </div>
     </div>

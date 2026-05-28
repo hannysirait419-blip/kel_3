@@ -2,66 +2,94 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Kelola Galeri - Admin Panel</title>
+    <title>Admin - Kelola Galeri</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background: #f4f4f4; }
-        .sidebar {
-            height: 100vh;
-            background-color: #212529;
-            color: white;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 250px;
-            padding-top: 20px;
-        }
-        .sidebar a {
-            color: white; text-decoration: none; display: block; padding: 10px 20px;
-        }
-        .sidebar a:hover { background-color: #495057; }
-        .content { margin-left: 250px; padding: 20px; }
+        body { background-color: #f8f9fa; }
+        .sidebar { height: 100vh; background-color: #212529; color: white; position: fixed; width: 250px; padding-top: 20px; }
+        .sidebar a { color: #adb5bd; text-decoration: none; display: block; padding: 12px 20px; }
+        .sidebar a:hover, .sidebar a.active { background-color: #343a40; color: white; border-left: 4px solid #198754; }
+        .content { margin-left: 250px; padding: 40px; }
     </style>
 </head>
-<body>
-
-<div th:replace="~{fragments/admin-sidebar :: sidebar}"></div>
-
-<div class="content">
-    <h2 class="fw-bold mb-4">Kelola Galeri</h2>
-
-    <div class="card p-4 shadow mb-5">
-        <h4 class="mb-3">Tambah Galeri</h4>
-        <form th:action="@{/admin/galeri/simpan}" method="post">
-            <input type="text" name="judul" class="form-control mb-3" placeholder="Judul Foto" required>
-            <textarea name="deskripsi" class="form-control mb-3" placeholder="Deskripsi Singkat"></textarea>
-            <input type="text" name="gambarUrl" class="form-control mb-3" placeholder="URL Gambar" required>
-            <button class="btn btn-success">Simpan Galeri</button>
-        </form>
-
-        <h4 class="mt-5 mb-3">Data Galeri</h4>
-        <table class="table table-bordered table-striped">
-            <thead class="table-dark">
-            <tr>
-                <th>Gambar</th>
-                <th>Judul</th>
-                <th>Aksi</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="galeri : ${daftarGaleri}">
-                <td>
-                    <img th:src="${galeri.gambarUrl}" style="height:50px; width:50px; object-fit:cover;">
-                </td>
-                <td th:text="${galeri.judul}"></td>
-                <td>
-                    <a th:href="@{/admin/galeri/hapus/{id}(id=${galeri.id})}" class="btn btn-danger btn-sm">Hapus</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+<body class="bg-light">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h4 class="text-center fw-bold mb-4">ADMIN PANEL</h4>
+        <a th:href="@{/admin/dashboard}">🏠 Dashboard</a>
+        <a th:href="@{/admin/menu}">🍴 Kelola Menu</a>
+        <a th:href="@{/admin/galeri}" class="active">📸 Kelola Galeri</a>
+        <a th:href="@{/admin/ulasan}">💬 Kelola Ulasan</a>
+        <div class="px-3 mt-5">
+            <a th:href="@{/logout}" class="btn btn-danger text-white text-center p-2 w-100">Logout</a>
+        </div>
     </div>
-</div>
 
+    <div class="content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold">Kelola Galeri</h2>
+        </div>
+
+        <div class="row">
+            <!-- Form Tambah -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-success text-white fw-bold">Tambah Foto Baru</div>
+                    <div class="card-body">
+                        <form th:action="@{/admin/galeri/simpan}" method="POST" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Judul Foto</label>
+                                <input type="text" name="judul" class="form-control" placeholder="Masukkan judul" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Deskripsi</label>
+                                <textarea name="deskripsi" class="form-control" rows="3" placeholder="Deskripsi singkat"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Pilih File Gambar</label>
+                                <input type="file" name="fileGambar" class="form-control" accept="image/*" required>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100 fw-bold">Simpan ke Galeri</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabel Data -->
+            <div class="col-md-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-0">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th class="ps-3">Gambar</th>
+                                    <th>Info Foto</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="g : ${daftarGaleri}">
+                                    <td class="ps-3"><img th:src="${g.gambarUrl}" width="100" class="rounded shadow-sm"></td>
+                                    <td>
+                                        <div class="fw-bold" th:text="${g.judul}"></div>
+                                        <small class="text-muted" th:text="${g.deskripsi}"></small>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group">
+                                            <!-- TOMBOL EDIT -->
+                                            <a th:href="@{'/admin/galeri/edit/' + ${g.id}}" class="btn btn-warning btn-sm text-white">Edit</a>
+                                            <!-- TOMBOL HAPUS -->
+                                            <a th:href="@{'/admin/galeri/hapus/' + ${g.id}}" class="btn btn-danger btn-sm" 
+                                               onclick="return confirm('Hapus gambar ini?')">Hapus</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

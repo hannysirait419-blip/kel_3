@@ -2,40 +2,50 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Agatha Cafe</title>
+    <title>Agatha Cafe - Menu Kami</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { background: #F9F6EE; }
-        .sidebar {
-            height: 100vh;
-            background-color: #1E4633;
-            color: white;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 250px;
-            padding-top: 20px;
-        }
-        .sidebar h3 { color: #F2542D; }
-        .sidebar a {
-            color: white; text-decoration: none; display: block; padding: 10px 20px; font-weight: 500;
-        }
-        .sidebar a:hover { background-color: #2d6a4f; }
+        /* CSS agar konten tidak tertutup sidebar */
         .content { margin-left: 250px; padding: 40px; }
+        .menu-card { border: none; border-radius: 15px; overflow: hidden; transition: 0.3s; }
+        .menu-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .price { color: #1E4633; font-weight: bold; font-size: 1.1rem; }
+        .section-title { color: #1E4633; border-bottom: 3px solid #F2542D; display: inline-block; margin-bottom: 30px; }
     </style>
 </head>
 <body>
 
+    <!-- MEMANGGIL SIDEBAR DARI FRAGMENT -->
     <div th:replace="~{fragments/user-sidebar :: sidebar}"></div>
 
-<div class="content">
-    <div class="mb-5 pb-5">
-        <div class="p-5 bg-white shadow-sm rounded text-center">
-            <h1 class="fw-bold" style="color: #1E4633;">Selamat Datang di Agatha Cafe</h1>
-            <p class="lead text-muted">Nikmati sajian kopi dan makanan terbaik kami.</p>
+    <div class="content">
+        <div class="mb-5">
+            <h2 class="fw-bold section-title">Menu Kami</h2>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4" th:each="menu : ${daftarMenu}">
+                    <div class="card menu-card shadow-sm">
+                        <!-- Path Gambar sesuai kodingan Controller -->
+                        <img th:src="${menu.gambarUrl}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Foto Menu">
+                        <div class="card-body bg-white">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h5 class="fw-bold mb-1" th:text="${menu.nama}">Nama Menu</h5>
+                                <span class="badge bg-success small" th:text="${menu.kategori}">Kategori</span>
+                            </div>
+                            <p class="text-muted small" th:text="${menu.deskripsi}">Deskripsi menu...</p>
+                            <div class="price" th:text="'Rp ' + ${menu.harga}">Rp 0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jika Menu Kosong -->
+                <div th:if="${#lists.isEmpty(daftarMenu)}" class="col-12 text-center py-5 text-muted">
+                    <p>Maaf, belum ada menu yang tersedia saat ini.</p>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
 </body>
 </html>
